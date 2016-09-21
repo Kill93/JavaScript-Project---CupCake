@@ -34,10 +34,12 @@
 
 img
 {
-	position: fixed;
+	position: absolute;
 	top: 70px;
 	height: 500px;
 	width: 500px;
+	margin-left: 80px;
+	margin-top: 50px;
 }
 
 #middle
