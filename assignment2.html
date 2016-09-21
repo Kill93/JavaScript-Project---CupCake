@@ -1,0 +1,315 @@
+<html>
+<head>
+	<title>Killian Nolan - R00129172</title>
+	
+	<link rel="stylesheet" type="text/css" href="stylesheet.css" /> 
+	
+<script type="text/javascript">
+	var grossPrice=0; var flavourCost=2; var addCost; var cherryCost=0; var sprinklesCost=0; var discount = 0;
+
+
+	function main(value)
+	{
+	
+	//main flavour calculation
+	
+		if (value == 1)
+			{
+				document.getElementById("mainColour").src = "images/blackcurrant.png";
+				document.forms["customerDetails"].mainColour.value="Blackcurrant";
+				flavourCost = 2.00;
+			}
+		else if (value == 2)
+			{
+				document.getElementById("mainColour").src = "images/strawberry.png";
+				document.forms["customerDetails"].mainColour.value="Strawberry";
+				flavourCost = 2.50;
+			}
+		else if (value == 3)
+			{
+				document.getElementById("mainColour").src = "images/mint.png";
+				document.forms["customerDetails"].mainColour.value="Mint";
+				flavourCost = 2.75;
+
+			}
+		else if (value == 4)
+			{
+				flavourCost = 3.00;
+				document.getElementById("mainColour").src = "images/chocolate.png";
+				document.forms["customerDetails"].mainColour.value="Chocolate";
+			}
+		
+	// cherry calculation
+	
+	if (document.getElementById('cherrylogo').checked)
+		{
+		document.getElementById("logo").src = "images/cherry.png";
+		cherryCost = 1.50;
+		document.forms["customerDetails"].cherry.value="Yes";
+		}
+	else
+		{
+		document.getElementById("logo").src = "images/blank.png";
+		cherryCost = 0;
+		document.forms["customerDetails"].cherry.value="No";
+		}	
+		
+	// sprinkles calculation
+	
+	if (document.getElementById('sprinkleslogo').checked)
+		{
+		document.getElementById("sprinkles").src = "images/sprinkles.png";
+		sprinklesCost = 2.00;
+		document.forms["customerDetails"].sprinkles.value="Yes";
+		}
+	else
+		{
+		document.getElementById("sprinkles").src = "images/blank.png";
+		sprinklesCost = 0;
+		document.forms["customerDetails"].sprinkles.value="No";
+		}
+		
+		
+	//Discount calculation
+	
+	var firstName = document.forms["customerDetails"].fName.value;
+	
+		firstName = firstName.toUpperCase();
+
+	
+	if(firstName=='COLIN')
+		{
+		discount=1;
+		}
+	
+	else{
+		discount =0;
+		}
+		
+		addCost = cherryCost + sprinklesCost;
+		grossPrice = flavourCost+ addCost - discount;
+		document.getElementById("price").innerHTML = "Cupcake Price: EUR " + flavourCost;
+		document.getElementById("addCost").innerHTML = "Add ons: EUR " + addCost;
+		document.getElementById("discounted").innerHTML = "Discount:  - EUR " + discount;
+		document.getElementById("grossPrice").innerHTML = "Total Price: EUR " + grossPrice;		
+
+		
+	}
+
+	function cvvCheck()
+	{
+		var legit = new Boolean(true);
+		var cvv = document.forms["customerDetails"].CVV.value;
+		
+		if ((cvv.length <3) || (cvv.length >4) ) //validated for American Express cards with 4 digit CVV
+		{
+			legit=false;
+		}
+		
+		if (legit == false)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+	
+	}
+	function expiryCheck()
+	{
+		var legit = new Boolean(true);
+		var expiry = document.forms["customerDetails"].expiryDate.value;
+		
+		if (expiry.length != 4)
+		{
+			legit=false;
+		}
+		
+		if (legit == false)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+	
+	}
+	function cardCheck()
+	{
+		var legit = new Boolean(true);
+		var cardNum = document.forms["customerDetails"].creditCard.value;
+		parseInt(cardNum,10);
+		var finalCheck = 0;
+		var temp = 0;
+		parseInt(temp,10);
+		
+		if ((cardNum==null) || (cardNum=="")) 
+		{
+			legit= false;
+		}
+		
+		if (cardNum.length != 16)
+		{
+			legit=false;
+		}
+
+
+		for (var n=0; n<cardNum.length; n++)
+			{
+				if(n % 2 == 0)
+					{
+						temp = parseInt(cardNum.charAt(n),10) * 2;
+						if(temp > 9)
+						{
+							temp = parseInt(String(temp).charAt(0),10) + parseInt(String(temp).charAt(1),10);
+						}
+					}
+				else
+					{
+						temp = parseInt(cardNum.charAt(n),10);
+					}
+				finalCheck = finalCheck + temp;
+			}
+			
+		
+		if ((finalCheck % 10) != 0)
+		{
+			legit=false;
+		}
+		
+		if (legit == false)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+	}
+	
+	
+	function validateinput(){
+	var legit = true;
+
+	if (cardCheck() == false){
+		alert("Please enter a valid Credit card");
+		document.getElementById('creditCard').style.background="yellow";
+		document.getElementById('creditCard').style.border="solid red 2px";
+		document.forms["customerDetails"].creditCard.value="";
+		legit = false;
+	}
+	if (cardCheck() != false){
+		document.getElementById('creditCard').style.background="";
+		document.getElementById('creditCard').style.border="";
+	}
+	
+	if (cvvCheck() == false){
+		alert("Please enter a valid CVV number");
+		document.getElementById('CVV').style.background="yellow";
+		document.getElementById('CVV').style.border="solid red 2px";
+		document.forms["customerDetails"].CVV.value="";
+		legit = false;
+	}
+	if (cvvCheck() != false){
+		document.getElementById('CVV').style.background="";
+		document.getElementById('CVV').style.border="";
+	}
+	
+	if (expiryCheck() == false){
+		alert("Please enter a valid Expiry Date!");
+		document.getElementById('expiryDate').style.background="yellow";
+		document.getElementById('expiryDate').style.border="solid red 2px";
+		document.forms["customerDetails"].expiryDate.value="";
+		legit = false;
+	}
+	if (expiryCheck() != false){
+		document.getElementById('expiryDate').style.background="";
+		document.getElementById('expiryDate').style.border="";
+	}
+
+	return legit;
+	}
+
+
+
+
+	
+	
+</script>
+</head>
+<div id = "page">
+<body onload="checkCookie()">
+
+<div id = "header">
+	<h1><center> Cupcake Order </center></h1>
+</div>
+
+<div id = "middle">
+
+<img src="images/base.png" alt="shoe" id="base"/>
+<img src="images/blackcurrant.png" alt="shoe" id="mainColour"/>
+<img src="images/blank.png" width="200" height="300" alt="shoe" id="logo"/>
+<img src="images/blank.png" width="200" height="300" alt="shoe" id="sprinkles"/>
+</div>
+
+<div id = "leftMenu">
+
+<p><b>Which flavour would you like?</b></br></br>
+	<input type="radio" name="main" id = "colourMain" onclick="main(this.value)" value="1" checked >Blackcurrant - EUR 2.00 </br>
+	<input type="radio" name="main" id = "colourMain" onclick="main(this.value)" value="2">Strawberry - EUR 2.50</br>
+	<input type="radio" name="main" id = "colourMain" onclick="main(this.value)" value="3">Mint - EUR 2.75</br>
+	<input type="radio" name="main" id = "colourMain" onclick="main(this.value)" value="4">Chocolate - EUR 3.0</br>
+	</p>
+	
+<p><b>What extras would you like?</b></br></br>
+<input type="checkbox" id="cherrylogo" onclick="main()"> Cherry ( + EUR1.50) </br>
+<input type="checkbox" id="sprinkleslogo" onclick="main()"> Sprinkles ( + EUR2.00)
+</br>
+</br>
+
+	<p id = "pinkInfo"> For a limited time only, if your first name is Colin you get 1 euro off your order!!</p>
+
+	<form id="customerDetails" onsubmit="return validateinput();"  method="get" action="http://atlantis.cit.ie/displayvalues.php">
+	<table border="0">
+	<tr>
+	<tr><td> First Name: </td><td> <input type="text" id="fName" name="First Name" required></td></tr>
+	<tr><td>Last Name: </td><td> <input type="text" id="lName" name="Last Name" required></td></tr>
+	<tr><td>Birthday: </td><td> <input type="date" id="bday" name="Birthday" required /></td></tr>
+	<tr><td> E-mail: </td><td> <input type="email" id="email" name="email" onblur= "doDiscount()" required></td></tr>
+	<tr><td> Credit Card Number: </td><td> <input type="text" id="creditCard" name="Credit card number"  required /></td></tr>
+<br/><br/>
+	<tr><td> Expiry Date (MMYY FORMAT) </td><td> <input type="text" id="expiryDate" name="Expiry date" required /></td></tr>
+	<tr><td> CVV </td><td> <input type="text" id="CVV" name="ccv" required /></td></tr>
+	<input type="hidden" name="main" id="mainColour" value="Blackberry" />
+	<input type="hidden" name="cherry" id = "cherrylogo" value="No" />
+	<input type="hidden" name="sprinkles" id = "sprinkleslogo" value="No" />
+
+	<table id = "cart">
+        <thead>
+          <tr>
+            <tr><th id = "price" > Cupcake Price: EUR 2</th></tr>
+            <tr><th id = "addCost" > Add ons: EUR 0</th></tr>
+			<tr><th id = "discounted" > Discount: - EUR 0</th></tr>
+            <tr><th id = "grossPrice" > Total Price: EUR 2</th></tr>
+          </tr>
+        </thead>
+	</table>
+	</br>
+	</br>
+	
+	<tr><td><input type="submit" value="Buy Now" onclick="" /></td></tr>
+	</table>
+	</form> 
+
+
+
+
+
+
+
+
+</body>
+</div>
+</html>
